@@ -1,4 +1,3 @@
-// @ts-expect-error 未安装types
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
