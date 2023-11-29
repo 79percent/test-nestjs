@@ -4,7 +4,6 @@ import {
   Get,
   Header,
   HttpCode,
-  Param,
   Post,
   Query,
   Redirect,
@@ -20,9 +19,9 @@ export class PageQuery {
 
 export class CreateCatDto {
   @ApiProperty()
-  name?: string;
+  readonly name?: string;
   @ApiProperty()
-  age?: number;
+  readonly age?: number;
 }
 
 export class DetailParams {
@@ -65,7 +64,7 @@ export class CatsController {
    * @returns
    */
   @Post('create')
-  create(@Body() createCatDto: CreateCatDto) {
+  async create(@Body() createCatDto: CreateCatDto) {
     const lastId = this.data[this.data.length - 1]?.id ?? -1;
     const item = {
       ...createCatDto,
@@ -84,9 +83,10 @@ export class CatsController {
    * @param params
    * @returns
    */
-  @Get(':id')
-  detail(@Param() params: DetailParams) {
-    const { id } = params;
+  @Get('detail')
+  detail(@Query() query: DetailParams) {
+    console.log('detail', query);
+    const { id } = query;
     const item = this.data.find((item) => item.id === Number(id));
     return {
       code: 200,
@@ -115,5 +115,10 @@ export class CatsController {
   testHeader(): any {
     // 返回指定响应头
     return 'Cache-Control: none';
+  }
+
+  @Get('testPromise')
+  async testPromise(): Promise<any[]> {
+    return [];
   }
 }
