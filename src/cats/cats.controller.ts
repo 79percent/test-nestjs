@@ -9,6 +9,8 @@ import {
   Redirect,
 } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
+import { CatsService } from './cats.service';
+import { Cat } from './interfaces/cat.interface';
 
 export class PageQuery {
   @ApiProperty()
@@ -39,7 +41,7 @@ export type DataItem = {
 export class CatsController {
   data: DataItem[];
 
-  constructor() {
+  constructor(private catsService: CatsService) {
     this.data = [];
   }
 
@@ -49,13 +51,9 @@ export class CatsController {
    * @returns
    */
   @Get('list')
-  list(@Query() query: PageQuery) {
+  async list(@Query() query: PageQuery): Promise<Cat[]> {
     console.log(query);
-    return {
-      code: 200,
-      data: this.data,
-      msg: '获取列表成功',
-    };
+    return this.catsService.list();
   }
 
   /**
